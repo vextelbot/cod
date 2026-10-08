@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEX Code | پیش‌نمایش زنده کد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --vex-turquoise: #06b6d4;
+            --vex-turquoise-dark: #0891b2;
+            --vex-turquoise-light: #22d3ee;
+            --vex-turquoise-glow: rgba(6, 182, 212, 0.4);
+            --telegram-blue: #0088cc;
+            --telegram-blue-dark: #006699;
+            --vex-black: #0a0e14;
+            --vex-black-2: #131820;
+            --vex-white: #ffffff;
+            --html-color: #e34c26;
+            --css-color: #264de4;
+            --js-color: #f7df1e;
+        }
+
+        :root, [data-theme="light"] {
+            --bg-gradient-1: #06b6d4;
+            --bg-gradient-2: #0891b2;
+            --bg-gradient-3: #22d3ee;
+            --bg-gradient-4: #0a0e14;
+            --surface: #ffffff;
+            --surface-2: #f0f9fb;
+            --surface-3: #e6f4f7;
+            --surface-elevated: #ffffff;
+            --text-primary: #0a0e14;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border: #cffafe;
+            --border-strong: #a5f3fc;
+            --shadow-color: rgba(6, 182, 212, 0.15);
+            --toolbar-bg: #f0f9fb;
+            --editor-bg: #0f141b;
+            --editor-text: #e6f4f7;
+            --header-bg: linear-gradient(180deg, #ffffff 0%, #f0f9fb 100%);
+            --status-bg: #e6f4f7;
+            --hero-bg: linear-gradient(135deg, #ffffff 0%, #f0f9fb 50%, #e6f4f7 100%);
+            --preview-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-1: #0a0e14;
+            --bg-gradient-2: #131820;
+            --bg-gradient-3: #06b6d4;
+            --bg-gradient-4: #000000;
+            --surface: #131820;
+            --surface-2: #1c232e;
+            --surface-3: #252d3a;
+            --surface-elevated: #1c232e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c4d0;
+            --text-muted: #7a8794;
+            --border: #252d3a;
+            --border-strong: #06b6d4;
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --toolbar-bg: #1c232e;
+            --editor-bg: #0a0e14;
+            --editor-text: #e6f4f7;
+            --header-bg: linear-gradient(180deg, #131820 0%, #0f141b 100%);
+            --status-bg: #0f141b;
+            --hero-bg: linear-gradient(135deg, #131820 0%, #0f141b 50%, #1a2330 100%);
+            --preview-bg: #ffffff;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: 
+                radial-gradient(circle at 15% 20%, var(--bg-gradient-1) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, var(--bg-gradient-3) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, var(--bg-gradient-2) 0%, transparent 60%),
+                linear-gradient(135deg, var(--bg-gradient-4) 0%, var(--bg-gradient-2) 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        body::before {
+            content: 'VEX';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(200px, 30vw, 500px);
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            letter-spacing: 20px;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            position: relative;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px -12px var(--shadow-color),
+                0 0 0 1px var(--border),
+                0 0 80px -20px var(--vex-turquoise-glow);
+            width: 100%;
+            max-width: 1200px;
+            min-width: 320px;
+            height: 900px;
+            min-height: 500px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            resize: both;
+            direction: ltr;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 0%, var(--vex-turquoise) 20%, var(--vex-turquoise-light) 50%, var(--vex-turquoise) 80%, transparent 100%);
+            z-index: 10;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== TOP CONTROLS ===== */
+        .top-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            direction: rtl;
+            z-index: 5;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-controls-left,
+        .top-controls-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-select {
+            display: flex;
+            align-items: center;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 4px;
+            gap: 2px;
+        }
+
+        .lang-btn {
+            padding: 5px 10px;
+            border: none;
+            background: transparent;
+            border-radius: 7px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background: var(--vex-turquoise);
+            color: #fff;
+            box-shadow: 0 4px 10px -2px var(--vex-turquoise-glow);
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-3);
+            color: var(--vex-turquoise);
+            border-color: var(--vex-turquoise);
+            transform: translateY(-2px);
+        }
+
+        .icon-btn svg { width: 17px; height: 17px; }
+
+        .icon-btn.active {
+            background: var(--vex-turquoise);
+            color: #fff;
+            border-color: var(--vex-turquoise);
+        }
+
+        /* ===== HERO BRAND ===== */
+        .hero-brand {
+            position: relative;
+            padding: 14px 24px 12px;
+            background: var(--hero-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .hero-brand::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--vex-turquoise-glow) 0%, transparent 60%);
+            filter: blur(40px);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .vex-hero-logo {
+            position: relative;
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--vex-turquoise) 0%, var(--vex-turquoise-dark) 100%);
+            box-shadow: 
+                0 12px 28px -8px var(--vex-turquoise-glow),
+                0 0 0 3px var(--surface),
+                0 0 0 4px var(--vex-turquoise);
+            animation: logoFloat 3s ease-in-out infinite;
+            z-index: 3;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .vex-hero-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            position: relative;
+            z-index: 2;
+            display: block;
+        }
+
+        .vex-hero-logo .logo-fallback {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .vex-hero-logo img.error + .logo-fallback { display: flex; }
+
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .vex-hero-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            background: linear-gradient(135deg, var(--vex-turquoise) 0%, var(--vex-turquoise-light) 50%, var(--vex-turquoise) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .vex-hero-tagline {
+            font-size: 9.5px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 500;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .vex-hero-tagline::before {
+            content: '◆';
+            color: var(--vex-turquoise);
+            margin-right: 6px;
+            font-size: 7px;
+            opacity: 0.6;
+        }
+
+        /* ===== TELEGRAM PROMO ===== */
+        .telegram-promo {
+            padding: 8px 18px 10px;
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.08), rgba(6, 182, 212, 0.08));
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            direction: rtl;
+            position: relative;
+        }
+
+        .promo-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .promo-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 11px;
+            border: 1.5px solid;
+            text-decoration: none;
+            transition: all 0.25s;
+            background: var(--surface);
+        }
+
+        .promo-btn.channel { border-color: rgba(0, 136, 204, 0.4); }
+        .promo-btn.channel:hover {
+            border-color: var(--telegram-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -6px rgba(0, 136, 204, 0.4);
+        }
+
+        .promo-btn.bot { border-color: rgba(6, 182, 212, 0.4); }
+        .promo-btn.bot:hover {
+            border-color: var(--vex-turquoise);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -6px var(--vex-turquoise-glow);
+        }
+
+        .promo-btn-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .promo-btn.channel .promo-btn-icon {
+            background: linear-gradient(135deg, var(--telegram-blue), var(--telegram-blue-dark));
+        }
+
+        .promo-btn.bot .promo-btn-icon {
+            background: linear-gradient(135deg, var(--vex-turquoise), var(--vex-turquoise-dark));
+        }
+
+        .promo-btn-icon svg { width: 15px; height: 15px; }
+        .promo-btn-content { flex: 1; min-width: 0; }
+        .promo-btn-title { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+        .promo-btn-subtitle { font-size: 9px; color: var(--text-muted); }
+
+        /* ===== SETTINGS PANEL ===== */
+        .settings-panel {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: var(--surface-elevated);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--border);
+            padding: 18px;
+            width: 300px;
+            z-index: 100;
+            display: none;
+            direction: rtl;
+        }
+
+        .settings-panel.show { display: block; }
+
+        .settings-panel h3 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .settings-panel h3 svg { color: var(--vex-turquoise); }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            gap: 12px;
+        }
+
+        .setting-row + .setting-row { border-top: 1px solid var(--border); }
+        .setting-row span { font-weight: 500; color: var(--text-primary); }
+
+        .setting-row select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            font-size: 12px;
+            font-family: inherit;
+            color: var(--text-primary);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            background: var(--border-strong);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .switch { background: var(--surface-3); }
+        .switch.on { background: var(--vex-turquoise); }
+
+        .switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .switch.on::after { transform: translateX(-18px); }
+
+        /* ===== CODE TOOLBAR ===== */
+        .code-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--toolbar-bg);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            direction: rtl;
+        }
+
+        /* ===== TOGGLE CHIPS (HTML/CSS/JS) ===== */
+        .lang-toggles {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .lang-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+            user-select: none;
+            position: relative;
+        }
+
+        .lang-chip:hover {
+            background: var(--surface-2);
+            color: var(--text-primary);
+        }
+
+        /* حالت تیک‌خورده (فعال) */
+        .lang-chip.checked {
+            color: #fff;
+            box-shadow: 0 4px 10px -2px var(--vex-turquoise-glow);
+        }
+
+        .lang-chip[data-lang="html"].checked {
+            background: linear-gradient(135deg, var(--html-color), #b8391e);
+        }
+
+        .lang-chip[data-lang="css"].checked {
+            background: linear-gradient(135deg, var(--css-color), #1a34a8);
+        }
+
+        .lang-chip[data-lang="js"].checked {
+            background: linear-gradient(135deg, #e6c700, var(--js-color));
+            color: #0a0e14;
+        }
+
+        /* چک‌باکس تیک */
+        .lang-chip .check-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 5px;
+            border: 1.8px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .lang-chip .check-box svg {
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s;
+            stroke-width: 3.5;
+        }
+
+        .lang-chip.checked .check-box {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #fff;
+        }
+
+        .lang-chip.checked .check-box svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .lang-chip[data-lang="js"].checked .check-box {
+            border-color: #0a0e14;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .lang-chip[data-lang="js"].checked .check-box svg {
+            color: #0a0e14;
+        }
+
+        .code-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .code-action-btn:hover {
+            background: var(--surface-2);
+            border-color: var(--vex-turquoise);
+            color: var(--vex-turquoise);
+            transform: translateY(-1px);
+        }
+
+        .code-action-btn svg { width: 14px; height: 14px; }
+
+        .code-action-btn.danger:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .code-action-btn.run {
+            background: linear-gradient(135deg, var(--vex-turquoise), var(--vex-turquoise-dark));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 6px 16px -4px var(--vex-turquoise-glow);
+        }
+
+        .code-action-btn.run:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px -6px var(--vex-turquoise-glow);
+            color: #fff;
+        }
+
+        .code-toolbar-divider {
+            width: 1px;
+            height: 22px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+
+        /* ===== MAIN SPLIT AREA ===== */
+        .split-area {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            min-height: 0;
+            overflow: hidden;
+            background: var(--surface-2);
+        }
+
+        /* ===== CODE EDITORS ===== */
+        .code-editors {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+            background: var(--editor-bg);
+            direction: ltr;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-editor-pane {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+            position: relative;
+        }
+
+        .code-editor-pane.active {
+            display: flex;
+        }
+
+        .code-editor-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #7a8794;
+            flex-shrink: 0;
+        }
+
+        .code-editor-header .file-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .code-editor-header .file-icon.html { background: var(--html-color); }
+        .code-editor-header .file-icon.css { background: var(--css-color); }
+        .code-editor-header .file-icon.js { background: var(--js-color); color: #000; }
+
+        .code-editor-header .file-name { color: #b8c4d0; font-weight: 500; }
+        .code-editor-header .file-status {
+            margin-left: auto;
+            color: #06b6d4;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .code-editor-header .file-status .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #06b6d4;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .code-area {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .line-numbers {
+            padding: 14px 10px 14px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #4a5568;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            text-align: right;
+            user-select: none;
+            overflow: hidden;
+            min-width: 42px;
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            white-space: pre;
+            flex-shrink: 0;
+        }
+
+        .code-textarea {
+            flex: 1;
+            padding: 14px 16px;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            color: var(--editor-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            overflow: auto;
+            tab-size: 2;
+            white-space: pre;
+            direction: ltr;
+            text-align: left;
+            caret-color: var(--vex-turquoise-light);
+        }
+
+        .code-textarea::selection {
+            background: rgba(6, 182, 212, 0.35);
+        }
+
+        .code-textarea::-webkit-scrollbar { width: 10px; height: 10px; }
+        .code-textarea::-webkit-scrollbar-track { background: transparent; }
+        .code-textarea::-webkit-scrollbar-thumb {
+            background: rgba(6, 182, 212, 0.3);
+            border-radius: 5px;
+        }
+        .code-textarea::-webkit-scrollbar-thumb:hover {
+            background: rgba(6, 182, 212, 0.6);
+        }
+        .code-textarea::-webkit-scrollbar-corner { background: transparent; }
+
+        /* ===== SPLITTER ===== */
+        .splitter {
+            width: 8px;
+            cursor: col-resize;
+            background: var(--border);
+            position: relative;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .splitter::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 40px;
+            background: var(--vex-turquoise);
+            border-radius: 2px;
+            opacity: 0.3;
+            transition: opacity 0.2s, height 0.2s;
+        }
+
+        .splitter:hover { background: rgba(6, 182, 212, 0.15); }
+        .splitter:hover::before { opacity: 1; height: 60px; }
+        .splitter.dragging { background: rgba(6, 182, 212, 0.25); }
+        .splitter.dragging::before { opacity: 1; height: 80px; }
+
+        /* ===== PREVIEW PANE ===== */
+        .preview-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+            background: var(--preview-bg);
+            direction: ltr;
+            position: relative;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            direction: rtl;
+        }
+
+        .preview-header svg {
+            width: 14px;
+            height: 14px;
+            color: var(--vex-turquoise);
+        }
+
+        .preview-header .preview-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .preview-header .preview-badge {
+            margin-right: auto;
+            font-size: 10px;
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--vex-turquoise);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .preview-header .preview-badge.live {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .preview-header .preview-badge.live::before {
+            content: '●';
+            margin-left: 4px;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .preview-frame-wrap {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+            display: block;
+        }
+
+        .preview-empty {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text-muted);
+            background: var(--preview-bg);
+            text-align: center;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .preview-empty svg {
+            width: 48px;
+            height: 48px;
+            color: var(--border-strong);
+            opacity: 0.6;
+        }
+
+        .preview-empty p {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .preview-empty span {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        /* ===== STATUS BAR ===== */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 24px;
+            background: var(--status-bg);
+            border-top: 1px solid var(--border);
+            font-size: 11.5px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            direction: rtl;
+            min-height: 34px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .stat-item { display: flex; align-items: center; gap: 5px; }
+        .stat-item svg { color: var(--vex-turquoise); opacity: 0.8; }
+        .stat-item strong { color: var(--text-primary); font-weight: 700; }
+        .stat-dot { color: var(--border-strong); }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .run-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .run-status.ready { color: #22c55e; }
+        .run-status.error { color: #ef4444; }
+
+        .run-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .run-status.ready .run-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--vex-black-2);
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--vex-turquoise);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            direction: rtl;
+            max-width: 90vw;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast svg { width: 16px; height: 16px; color: var(--vex-turquoise); }
+
+        .toast.error {
+            background: #7f1d1d;
+            box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px #ef4444;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .split-area {
+                flex-direction: column;
+            }
+
+            .splitter {
+                width: 100%;
+                height: 8px;
+                cursor: row-resize;
+            }
+
+            .splitter::before {
+                width: 40px;
+                height: 2px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .splitter:hover::before { width: 60px; height: 2px; }
+            .splitter.dragging::before { width: 80px; height: 2px; }
+
+            .code-editors { min-height: 200px; }
+            .preview-pane { min-height: 150px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+
+            .app-container {
+                max-width: 100%;
+                height: calc(100vh - 16px);
+                height: calc(100dvh - 16px);
+                border-radius: 20px;
+                resize: none;
+                min-width: unset;
+            }
+
+            .hero-brand { padding: 12px 14px 10px; gap: 12px; }
+            .vex-hero-logo { width: 52px; height: 52px; border-radius: 13px; }
+            .vex-hero-logo img { border-radius: 13px; }
+            .vex-hero-name { font-size: 17px; letter-spacing: 4px; }
+            .vex-hero-tagline { font-size: 8.5px; letter-spacing: 2px; }
+
+            .promo-buttons { grid-template-columns: 1fr; }
+
+            .code-toolbar {
+                padding: 8px 12px;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                scrollbar-width: none;
+            }
+
+            .code-toolbar::-webkit-scrollbar { display: none; }
+            .code-action-btn span { display: none; }
+            .code-action-btn { flex-shrink: 0; padding: 8px 10px; }
+            .lang-chip { padding: 6px 10px; font-size: 11.5px; }
+            .code-toolbar-divider { flex-shrink: 0; }
+
+            .code-textarea, .line-numbers {
+                font-size: 11.5px;
+                line-height: 1.65;
+            }
+
+            .line-numbers { min-width: 36px; padding: 12px 8px; }
+            .code-textarea { padding: 12px 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .vex-hero-logo { width: 44px; height: 44px; }
+            .vex-hero-name { font-size: 14px; letter-spacing: 3px; }
+            .vex-hero-tagline { font-size: 8px; }
+            .lang-chip span.chip-label { display: none; }
+            .lang-chip { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="appContainer">
+
+        <!-- ===== TOP CONTROLS ===== -->
+        <div class="top-controls">
+            <div class="top-controls-left">
+                <div class="lang-select">
+                    <button class="lang-btn active" data-lang="fa-IR">FA</button>
+                    <button class="lang-btn" data-lang="en-US">EN</button>
+                </div>
+            </div>
+            <div class="top-controls-right">
+                <button class="icon-btn" id="formatBtn" title="فرمت کردن کد">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7h16M4 12h10M4 17h16"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="fullscreenBtn" title="تمام صفحه پیش‌نمایش">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="settingsBtn" title="تنظیمات">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== HERO BRAND ===== -->
+        <div class="hero-brand">
+            <div class="vex-hero-logo">
+                <img src="https://cdn.imgurl.ir/uploads/j0904_msg45237068-49764.jpg" alt="VEX Logo" onerror="this.classList.add('error')">
+                <div class="logo-fallback">VEX</div>
+            </div>
+            <div class="hero-text">
+                <div class="vex-hero-name">VEX CODE</div>
+                <div class="vex-hero-tagline">Live HTML · CSS · JS Preview</div>
+            </div>
+        </div>
+
+        <!-- ===== TELEGRAM PROMO ===== -->
+        <div class="telegram-promo">
+            <div class="promo-buttons">
+                <a href="https://t.me/vex_telbot" target="_blank" class="promo-btn channel">
+                    <div class="promo-btn-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+                        </svg>
+                    </div>
+                    <div class="promo-btn-content">
+                        <div class="promo-btn-title">کانال رسمی VEX</div>
+                        <div class="promo-btn-subtitle">عضویت در کانال</div>
+                    </div>
+                </a>
+                <a href="https://t.me/Vextel_bot" target="_blank" class="promo-btn bot">
+                    <div class="promo-btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="10" rx="2"/>
+                            <circle cx="12" cy="5" r="2"/>
+                            <path d="M12 7v4"/>
+                        </svg>
+                    </div>
+                    <div class="promo-btn-content">
+                        <div class="promo-btn-title">فروشگاه VEX</div>
+                        <div class="promo-btn-subtitle">خرید از ربات</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ===== SETTINGS PANEL ===== -->
+        <div class="settings-panel" id="settingsPanel">
+            <h3>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                تنظیمات VEX Code
+            </h3>
+            <div class="setting-row">
+                <span>🌙 حالت تاریک</span>
+                <div class="switch" id="darkModeSwitch"></div>
+            </div>
+            <div class="setting-row">
+                <span>⚡ اجرای خودکار</span>
+                <div class="switch on" id="autoRunSwitch"></div>
+            </div>
+            <div class="setting-row">
+                <span>تاخیر اجرا</span>
+                <select id="runDelay">
+                    <option value="300">۰.۳ ثانیه</option>
+                    <option value="600" selected>۰.۶ ثانیه</option>
+                    <option value="1000">۱ ثانیه</option>
+                    <option value="1500">۱.۵ ثانیه</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <span>اندازه فونت کد</span>
+                <select id="codeFontSize">
+                    <option value="11px">کوچک</option>
+                    <option value="12.5px" selected>متوسط</option>
+                    <option value="14px">بزرگ</option>
+                    <option value="16px">خیلی بزرگ</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ===== CODE TOOLBAR ===== -->
+        <div class="code-toolbar">
+            <!-- ===== TOGGLE CHIPS (HTML/CSS/JS) ===== -->
+            <div class="lang-toggles" id="langToggles">
+                <button class="lang-chip checked" data-lang="html">
+                    <span class="check-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    <span class="chip-label">HTML</span>
+                </button>
+                <button class="lang-chip" data-lang="css">
+                    <span class="check-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    <span class="chip-label">CSS</span>
+                </button>
+                <button class="lang-chip" data-lang="js">
+                    <span class="check-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    <span class="chip-label">JS</span>
+                </button>
+            </div>
+
+            <div class="code-toolbar-divider"></div>
+
+            <button class="code-action-btn run" id="runBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>اجرا</span>
+            </button>
+
+            <button class="code-action-btn" id="copyBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>کپی</span>
+            </button>
+
+            <button class="code-action-btn" id="downloadBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>دانلود همه</span>
+            </button>
+
+            <button class="code-action-btn danger" id="clearBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>پاک</span>
+            </button>
+        </div>
+
+        <!-- ===== SPLIT AREA (EDITORS + PREVIEW) ===== -->
+        <div class="split-area" id="splitArea">
+
+            <!-- Code Editors -->
+            <div class="code-editors" id="codeEditors">
+
+                <!-- HTML Editor -->
+                <div class="code-editor-pane" data-pane="html">
+                    <div class="code-editor-header">
+                        <span class="file-icon html">H</span>
+                        <span class="file-name">index.html</span>
+                        <span class="file-status"><span class="dot"></span>ویرایش زنده</span>
+                    </div>
+                    <div class="code-area">
+                        <div class="line-numbers" id="linesHtml">1</div>
+                        <textarea class="code-textarea" id="htmlCode" spellcheck="false" placeholder="<!-- HTML خود را اینجا بنویسید -->"></textarea>
+                    </div>
+                </div>
+
+                <!-- CSS Editor -->
+                <div class="code-editor-pane" data-pane="css">
+                    <div class="code-editor-header">
+                        <span class="file-icon css">C</span>
+                        <span class="file-name">style.css</span>
+                        <span class="file-status"><span class="dot"></span>ویرایش زنده</span>
+                    </div>
+                    <div class="code-area">
+                        <div class="line-numbers" id="linesCss">1</div>
+                        <textarea class="code-textarea" id="cssCode" spellcheck="false" placeholder="/* CSS خود را اینجا بنویسید */"></textarea>
+                    </div>
+                </div>
+
+                <!-- JS Editor -->
+                <div class="code-editor-pane" data-pane="js">
+                    <div class="code-editor-header">
+                        <span class="file-icon js">JS</span>
+                        <span class="file-name">script.js</span>
+                        <span class="file-status"><span class="dot"></span>ویرایش زنده</span>
+                    </div>
+                    <div class="code-area">
+                        <div class="line-numbers" id="linesJs">1</div>
+                        <textarea class="code-textarea" id="jsCode" spellcheck="false" placeholder="// JavaScript خود را اینجا بنویسید"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Splitter -->
+            <div class="splitter" id="splitter" title="برای تغییر اندازه بکشید"></div>
+
+            <!-- Preview -->
+            <div class="preview-pane" id="previewPane">
+                <div class="preview-header">
+                    <div class="preview-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        پیش‌نمایش زنده
+                    </div>
+                    <div class="preview-badge live" id="previewBadge">زنده</div>
+                </div>
+                <div class="preview-frame-wrap">
+                    <iframe class="preview-frame" id="previewFrame" sandbox="allow-scripts allow-modals allow-forms allow-popups allow-same-origin"></iframe>
+                    <div class="preview-empty" id="previewEmpty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                        <p>برای شروع، یک زبان را از بالا تیک بزنید</p>
+                        <span>پیش‌نمایش به صورت زنده اینجا نمایش داده می‌شود</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STATUS BAR ===== -->
+        <div class="status-bar">
+            <div class="status-left">
+                <div class="stat-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                    </svg>
+                    <strong id="lineCount">۱</strong> خط
+                </div>
+                <span class="stat-dot">•</span>
+                <div class="stat-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <strong id="charCount">۰</strong> کاراکتر
+                </div>
+                <span class="stat-dot">•</span>
+                <div class="stat-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <strong id="runCount">۰</strong> اجرا
+                </div>
+            </div>
+            <div class="status-right">
+                <div class="run-status ready" id="runStatus">
+                    <div class="run-dot"></div>
+                    <span id="runStatusText">آماده</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toastText">انجام شد</span>
+    </div>
+
+    <script>
+        // =============================================
+        // ===== ELEMENTS =====
+        // =============================================
+        const appContainer = document.getElementById('appContainer');
+        const htmlCode = document.getElementById('htmlCode');
+        const cssCode = document.getElementById('cssCode');
+        const jsCode = document.getElementById('jsCode');
+        const linesHtml = document.getElementById('linesHtml');
+        const linesCss = document.getElementById('linesCss');
+        const linesJs = document.getElementById('linesJs');
+        const previewFrame = document.getElementById('previewFrame');
+        const previewEmpty = document.getElementById('previewEmpty');
+        const previewBadge = document.getElementById('previewBadge');
+        const splitter = document.getElementById('splitter');
+        const splitArea = document.getElementById('splitArea');
+        const codeEditors = document.getElementById('codeEditors');
+        const previewPane = document.getElementById('previewPane');
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+        const runBtn = document.getElementById('runBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const formatBtn = document.getElementById('formatBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const darkModeSwitch = document.getElementById('darkModeSwitch');
+        const autoRunSwitch = document.getElementById('autoRunSwitch');
+        const runDelay = document.getElementById('runDelay');
+        const codeFontSize = document.getElementById('codeFontSize');
+        const langChips = document.querySelectorAll('.lang-chip');
+        const langBtns = document.querySelectorAll('.lang-btn');
+        const lineCount = document.getElementById('lineCount');
+        const charCount = document.getElementById('charCount');
+        const runCount = document.getElementById('runCount');
+        const runStatus = document.getElementById('runStatus');
+        const runStatusText = document.getElementById('runStatusText');
+
+        // =============================================
+        // ===== STATE =============================================
+        // =============================================
+        // وضعیت تیک‌خوردگی هر زبان — شبیه چک‌باکس
+        // وقتی تیک می‌خوره → ادیتورش باز میشه
+        // وقتی تیک برداشته میشه → بسته میشه
+        const langState = {
+            html: true,   // HTML پیش‌فرض باز
+            css: false,
+            js: false
+        };
+
+        let autoRunEnabled = true;
+        let autoRunDelay = 600;
+        let autoRunTimer = null;
+        let totalRuns = 0;
+
+        // =============================================
+        // ===== DEFAULT CODE =============================================
+        // =============================================
+        const DEFAULT_HTML = `<!-- ✨ به VEX Code خوش آمدید -->
+<div class="card">
+  <div class="logo">VEX</div>
+  <h1>سلام دنیا!</h1>
+  <p>این یک پیش‌نمایش زنده است.</p>
+  <button id="myBtn">کلیک کن</button>
+  <p id="counter">تعداد کلیک: 0</p>
+</div>`;
+
+        const DEFAULT_CSS = `/* 🎨 استایل خود را اینجا بنویسید */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  font-family: 'Vazirmatn', sans-serif;
+  direction: rtl;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  max-width: 360px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 10px 24px -6px rgba(6, 182, 212, 0.5);
+}
+
+h1 {
+  color: #0a0e14;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+p {
+  color: #4a5568;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 10px 24px -6px rgba(6, 182, 212, 0.5);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -8px rgba(6, 182, 212, 0.6);
+}
+
+#counter {
+  margin-top: 16px;
+  font-weight: 700;
+  color: #06b6d4;
+}`;
+
+        const DEFAULT_JS = `// ⚡ کد جاوا اسکریپت خود را اینجا بنویسید
+let count = 0;
+const btn = document.getElementById('myBtn');
+const counter = document.getElementById('counter');
+
+btn.addEventListener('click', () => {
+  count++;
+  counter.textContent = 'تعداد کلیک: ' + count;
+  console.log('کلیک شد! تعداد:', count);
+});
+
+console.log('✨ VEX Code آماده است!');`;
+
+        // =============================================
+        // ===== HELPERS =============================================
+        // =============================================
+        function toPersianNum(num) {
+            return String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+        }
+
+        function updateLineNumbers(textarea, lineEl) {
+            const lines = textarea.value.split('\n').length;
+            let out = '';
+            for (let i = 1; i <= lines; i++) out += i + '\n';
+            lineEl.textContent = out.trimEnd();
+        }
+
+        function syncScroll(textarea, lineEl) {
+            lineEl.scrollTop = textarea.scrollTop;
+        }
+
+        // =============================================
+        // ===== TOAST =============================================
+        // =============================================
+        let toastTimeout;
+        function showToast(msg, type = 'success') {
+            toastText.textContent = msg;
+            toast.classList.add('show');
+            toast.classList.toggle('error', type === 'error');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 2400);
+        }
+
+        // =============================================
+        // ===== APPLY LANG STATE (نمایش/مخفی ادیتورها) =============================================
+        // =============================================
+        function applyLangState() {
+            // هر پنل ادیتور فقط اگر تیک خورده باشد نمایش داده میشود
+            document.querySelectorAll('.code-editor-pane').forEach(pane => {
+                const lang = pane.dataset.pane;
+                pane.classList.toggle('active', !!langState[lang]);
+            });
+
+            // همگام‌سازی چک‌باکس‌ها
+            langChips.forEach(chip => {
+                chip.classList.toggle('checked', !!langState[chip.dataset.lang]);
+            });
+
+            // اگر هیچ ادیتوری باز نبود → پیام "یک زبان را تیک بزنید"
+            const anyOpen = Object.values(langState).some(v => v);
+            if (!anyOpen) {
+                // پیش‌نمایش را خالی نگه دار
+                previewEmpty.style.display = 'flex';
+                previewFrame.srcdoc = '';
+            } else {
+                previewEmpty.style.display = 'none';
+            }
+        }
+
+        // =============================================
+        // ===== LANGUAGE CHIPS (تیک زدن) =============================================
+        // =============================================
+        langChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const lang = chip.dataset.lang;
+                langState[lang] = !langState[lang];
+
+                applyLangState();
+
+                // اگر بعد از تیک خوردن، باز شد و قبلاً خالی بوده، کد پیش‌فرض بذار
+                if (langState[lang]) {
+                    if (lang === 'html' && !htmlCode.value.trim()) htmlCode.value = DEFAULT_HTML;
+                    if (lang === 'css' && !cssCode.value.trim()) cssCode.value = DEFAULT_CSS;
+                    if (lang === 'js' && !jsCode.value.trim()) jsCode.value = DEFAULT_JS;
+                    updateLineNumbers(htmlCode, linesHtml);
+                    updateLineNumbers(cssCode, linesCss);
+                    updateLineNumbers(jsCode, linesJs);
+                    updateStats();
+                    scheduleAutoRun();
+                    showToast(`✓ ${lang.toUpperCase()} باز شد`);
+                } else {
+                    showToast(`${lang.toUpperCase()} بسته شد`);
+                }
+            });
+        });
+
+        // =============================================
+        // ===== RUN PREVIEW =============================================
+        // =============================================
+        function runPreview() {
+            const anyOpen = Object.values(langState).some(v => v);
+            if (!anyOpen) {
+                previewEmpty.style.display = 'flex';
+                previewFrame.srcdoc = '';
+                return;
+            }
+
+            const html = langState.html ? htmlCode.value : '';
+            const css = langState.css ? cssCode.value : '';
+            const js = langState.js ? jsCode.value : '';
+
+            const hasContent = html.trim() || css.trim() || js.trim();
+
+            if (!hasContent) {
+                previewEmpty.style.display = 'flex';
+                previewFrame.srcdoc = '';
+                return;
+            }
+
+            previewEmpty.style.display = 'none';
+            previewBadge.textContent = 'در حال اجرا...';
+
+            const doc = `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>${css}</style>
+</head>
+<body>
+${html}
+<script>
+try {
+${js}
+} catch (err) {
+  document.body.insertAdjacentHTML('beforeend',
+    '<pre style="position:fixed;bottom:8px;left:8px;right:8px;background:#7f1d1d;color:#fff;padding:10px;border-radius:8px;font-size:12px;direction:ltr;text-align:left;z-index:99999;">خطا: ' + err.message + '</pre>');
+  console.error(err);
+}
+<\/script>
+</body>
+</html>`;
+
+            previewFrame.srcdoc = doc;
+            totalRuns++;
+            runCount.textContent = toPersianNum(totalRuns);
+
+            runStatus.classList.remove('error');
+            runStatus.classList.add('ready');
+            runStatusText.textContent = 'اجرا شد';
+
+            setTimeout(() => {
+                previewBadge.textContent = 'زنده';
+            }, 400);
+        }
+
+        function scheduleAutoRun() {
+            if (!autoRunEnabled) return;
+            clearTimeout(autoRunTimer);
+            runStatusText.textContent = 'در انتظار...';
+            runStatus.classList.remove('ready');
+            autoRunTimer = setTimeout(runPreview, autoRunDelay);
+        }
+
+        // =============================================
+        // ===== UPDATE STATS =============================================
+        // =============================================
+        function updateStats() {
+            const all = (htmlCode.value + cssCode.value + jsCode.value);
+            const lines = all.split('\n').length;
+            lineCount.textContent = toPersianNum(lines);
+            charCount.textContent = toPersianNum(all.length);
+        }
+
+        // =============================================
+        // ===== EDITOR INPUT HANDLERS =============================================
+        // =============================================
+        function bindEditor(textarea, lineEl) {
+            textarea.addEventListener('input', () => {
+                updateLineNumbers(textarea, lineEl);
+                updateStats();
+                scheduleAutoRun();
+            });
+
+            textarea.addEventListener('scroll', () => syncScroll(textarea, lineEl));
+
+            textarea.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
+                    textarea.selectionStart = textarea.selectionEnd = start + 2;
+                    updateLineNumbers(textarea, lineEl);
+                }
+            });
+        }
+
+        bindEditor(htmlCode, linesHtml);
+        bindEditor(cssCode, linesCss);
+        bindEditor(jsCode, linesJs);
+
+        // =============================================
+        // ===== INIT =============================================
+        // =============================================
+        (function init() {
+            // بارگذاری از localStorage یا پیش‌فرض
+            try {
+                htmlCode.value = localStorage.getItem('vex_code_html') ?? DEFAULT_HTML;
+                cssCode.value = localStorage.getItem('vex_code_css') ?? DEFAULT_CSS;
+                jsCode.value = localStorage.getItem('vex_code_js') ?? DEFAULT_JS;
+            } catch(e) {
+                htmlCode.value = DEFAULT_HTML;
+                cssCode.value = DEFAULT_CSS;
+                jsCode.value = DEFAULT_JS;
+            }
+
+            updateLineNumbers(htmlCode, linesHtml);
+            updateLineNumbers(cssCode, linesCss);
+            updateLineNumbers(jsCode, linesJs);
+            updateStats();
+
+            applyLangState();
+
+            // اجرای اولیه
+            setTimeout(runPreview, 300);
+        })();
+
+        // ذخیره خودکار
+        function saveCode() {
+            try {
+                localStorage.setItem('vex_code_html', htmlCode.value);
+                localStorage.setItem('vex_code_css', cssCode.value);
+                localStorage.setItem('vex_code_js', jsCode.value);
+            } catch(e) {}
+        }
+
+        [htmlCode, cssCode, jsCode].forEach(t => {
+            t.addEventListener('input', () => {
+                clearTimeout(window._saveTimer);
+                window._saveTimer = setTimeout(saveCode, 600);
+            });
+        });
+
+        // =============================================
+        // ===== TOP LANG BUTTONS =============================================
+        // =============================================
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showToast(`🌐 زبان: ${btn.textContent}`);
+            });
+        });
+
+        // =============================================
+        // ===== ACTIONS =============================================
+        // =============================================
+        runBtn.addEventListener('click', () => {
+            runPreview();
+            showToast('✓ اجرا شد');
+        });
+
+        copyBtn.addEventListener('click', async () => {
+            // فقط زبان‌های تیک‌خورده را کپی میکنیم
+            let code = '';
+            if (langState.html) code += `<!-- HTML -->\n${htmlCode.value}\n\n`;
+            if (langState.css)  code += `/* CSS */\n${cssCode.value}\n\n`;
+            if (langState.js)   code += `// JS\n${jsCode.value}`;
+
+            if (!code.trim()) return showToast('کدی برای کپی نیست', 'error');
+            try {
+                await navigator.clipboard.writeText(code.trim());
+                showToast('✓ کد کپی شد');
+            } catch (e) {
+                showToast('خطا در کپی', 'error');
+            }
+        });
+
+        // =============================================
+        // ===== DOWNLOAD ALL (HTML + CSS + JS جدا) =============================================
+        // =============================================
+        downloadBtn.addEventListener('click', () => {
+            // فایل HTML اصلی که به CSS و JS لینک شده
+            const indexHtml = `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEX Code Export</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+${htmlCode.value}
+<script src="script.js"><\/script>
+</body>
+</html>`;
+
+            const styleCss = cssCode.value;
+            const scriptJs = jsCode.value;
+
+            // دانلود هر سه فایل پشت سر هم
+            downloadFile('index.html', indexHtml, 'text/html');
+            setTimeout(() => downloadFile('style.css', styleCss, 'text/css'), 300);
+            setTimeout(() => downloadFile('script.js', scriptJs, 'text/javascript'), 600);
+
+            showToast('✓ ۳ فایل دانلود شد (HTML + CSS + JS)');
+        });
+
+        function downloadFile(filename, content, mime) {
+            const blob = new Blob([content], { type: `${mime};charset=utf-8` });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        clearBtn.addEventListener('click', () => {
+            if (!confirm('پاک کردن همه کدها؟')) return;
+            htmlCode.value = '';
+            cssCode.value = '';
+            jsCode.value = '';
+            updateLineNumbers(htmlCode, linesHtml);
+            updateLineNumbers(cssCode, linesCss);
+            updateLineNumbers(jsCode, linesJs);
+            updateStats();
+            saveCode();
+            runPreview();
+            showToast('🗑️ پاک شد');
+        });
+
+        formatBtn.addEventListener('click', () => {
+            [htmlCode, cssCode, jsCode].forEach(t => {
+                t.value = t.value.replace(/\n{3,}/g, '\n\n').trimEnd();
+            });
+            updateLineNumbers(htmlCode, linesHtml);
+            updateLineNumbers(cssCode, linesCss);
+            updateLineNumbers(jsCode, linesJs);
+            updateStats();
+            saveCode();
+            runPreview();
+            showToast('✨ فرمت شد');
+        });
+
+        fullscreenBtn.addEventListener('click', () => {
+            const wrap = previewPane.querySelector('.preview-frame-wrap');
+            if (!document.fullscreenElement) {
+                if (wrap.requestFullscreen) wrap.requestFullscreen();
+                fullscreenBtn.classList.add('active');
+            } else {
+                document.exitFullscreen();
+                fullscreenBtn.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) fullscreenBtn.classList.remove('active');
+        });
+
+        // =============================================
+        // ===== SETTINGS =============================================
+        // =============================================
+        settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsPanel.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsPanel.classList.remove('show');
+            }
+        });
+
+        darkModeSwitch.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isDark = !document.documentElement.hasAttribute('data-theme') || document.documentElement.getAttribute('data-theme') !== 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            darkModeSwitch.classList.toggle('on', isDark);
+            try { localStorage.setItem('vex_code_theme', isDark ? 'dark' : 'light'); } catch(e) {}
+        });
+
+        (function loadTheme() {
+            try {
+                const saved = localStorage.getItem('vex_code_theme');
+                if (saved === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    darkModeSwitch.classList.add('on');
+                }
+            } catch(e) {}
+        })();
+
+        autoRunSwitch.addEventListener('click', (e) => {
+            e.stopPropagation();
+            autoRunSwitch.classList.toggle('on');
+            autoRunEnabled = autoRunSwitch.classList.contains('on');
+        });
+
+        runDelay.addEventListener('change', () => {
+            autoRunDelay = parseInt(runDelay.value);
+        });
+
+        codeFontSize.addEventListener('change', () => {
+            document.querySelectorAll('.code-textarea, .line-numbers').forEach(el => {
+                el.style.fontSize = codeFontSize.value;
+            });
+        });
+
+        // =============================================
+        // ===== SPLITTER (RESIZE EDITORS/PREVIEW) =============================================
+        // =============================================
+        let isSplitDragging = false;
+
+        function getSplitCoords(e) {
+            if (e.touches && e.touches.length) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function isVerticalLayout() {
+            return window.matchMedia('(max-width: 900px)').matches;
+        }
+
+        function startSplit(e) {
+            e.preventDefault();
+            isSplitDragging = true;
+            splitter.classList.add('dragging');
+            document.body.style.userSelect = 'none';
+            document.body.style.cursor = isVerticalLayout() ? 'row-resize' : 'col-resize';
+        }
+
+        function doSplit(e) {
+            if (!isSplitDragging) return;
+            e.preventDefault();
+
+            const rect = splitArea.getBoundingClientRect();
+            const coords = getSplitCoords(e);
+            const vertical = isVerticalLayout();
+
+            let ratio;
+            if (!vertical) {
+                ratio = (coords.x - rect.left) / rect.width;
+                ratio = Math.max(0.15, Math.min(0.85, ratio));
+                codeEditors.style.flex = `0 0 ${ratio * 100}%`;
+                previewPane.style.flex = `0 0 ${(1 - ratio) * 100}%`;
+            } else {
+                ratio = (coords.y - rect.top) / rect.height;
+                ratio = Math.max(0.15, Math.min(0.85, ratio));
+                codeEditors.style.flex = `0 0 ${ratio * 100}%`;
+                previewPane.style.flex = `0 0 ${(1 - ratio) * 100}%`;
+            }
+        }
+
+        function endSplit() {
+            if (!isSplitDragging) return;
+            isSplitDragging = false;
+            splitter.classList.remove('dragging');
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+        }
+
+        splitter.addEventListener('mousedown', startSplit);
+        document.addEventListener('mousemove', doSplit);
+        document.addEventListener('mouseup', endSplit);
+        splitter.addEventListener('touchstart', startSplit, { passive: false });
+        document.addEventListener('touchmove', doSplit, { passive: false });
+        document.addEventListener('touchend', endSplit);
+
+        // =============================================
+        // ===== KEYBOARD SHORTCUTS =============================================
+        // =============================================
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveCode();
+                showToast('✓ ذخیره شد');
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                runPreview();
+                showToast('✓ اجرا شد');
+            }
+            // Ctrl + 1/2/3 → تیک‌زدن/برداشتن تب‌ها
+            if ((e.ctrlKey || e.metaKey) && ['1', '2', '3'].includes(e.key)) {
+                e.preventDefault();
+                const langs = ['html', 'css', 'js'];
+                const lang = langs[parseInt(e.key) - 1];
+                document.querySelector(`.lang-chip[data-lang="${lang}"]`)?.click();
+            }
+        });
+
+        // =============================================
+        // ===== INIT LOG =============================================
+        // =============================================
+        console.log('%c VEX Code ', 'background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; padding: 4px 12px; border-radius: 6px; font-weight: 900; font-size: 14px;');
+        console.log('%c پیش‌نمایش زنده HTML · CSS · JS', 'color: #06b6d4; font-weight: 600;');
+        console.log('%cمیانبر‌ها: Ctrl+S ذخیره | Ctrl+Enter اجرا | Ctrl+1/2/3 تیک‌زدن تب‌ها', 'color: #7a8794; font-size: 11px;');
+    </script>
+</body>
+</html>
